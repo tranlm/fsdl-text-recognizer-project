@@ -18,13 +18,7 @@ def mlp(input_shape: Tuple[int, ...],
     model = Sequential()
     # Don't forget to pass input_shape to the first layer of the model
     ##### Your code below (Lab 1)
-    if num_layers<1:
-        raise ValueError("Model needs at least 1 layer")
-    model.add(Flatten(input_shape=input_shape))
-    for _ in range(0, num_layers):
-        model.add(Dense(layer_size, input_dim=layer_size, activation='relu'))
-        model.add(Dropout(dropout_amount))
-    model.add(Dense(num_classes, activation='softmax'))
+
     ##### Your code above (Lab 1)
 
     return model

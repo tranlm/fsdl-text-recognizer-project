@@ -9,6 +9,9 @@ from tensorflow.keras.models import load_model
 from text_recognizer.models.base import Model
 from text_recognizer.datasets.emnist import EmnistDataset
 from text_recognizer.networks.mlp import mlp
+##### Hide lines below until Lab 2
+from text_recognizer.networks.lenet import lenet
+##### Hide lines above until Lab 2
 
 
 class CharacterModel(Model):
@@ -22,9 +25,9 @@ class CharacterModel(Model):
         # NOTE: integer to character mapping dictionary is self.data.mapping[integer]
         ##### Your code below (Lab 1)
         pred_raw = self.network.predict(np.expand_dims(image, 0), batch_size=1).flatten()
-        pred_idx = np.argmax(pred_raw)
-        confidence_of_prediction = pred_raw[pred_idx]
-        predicted_character = self.data.mapping[pred_idx]
+        ind = np.argmax(pred_raw)
+        confidence_of_prediction = pred_raw[ind]
+        predicted_character = self.data.mapping[ind]
         ##### Your code above (Lab 1)
         return predicted_character, confidence_of_prediction
 
