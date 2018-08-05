@@ -1,0 +1,16 @@
+{
+    "root": "/home/yuzan/fsdl-text-recognizer-project",
+    "git": {
+        "remote": "https://github.com/gradescope/fsdl-text-recognizer-project",
+        "commit": "d6d1d1c0ce01c988ca946671a77de0abbc169215"
+    },
+    "email": null,
+    "startedAt": "2018-08-05T06:09:35.910525",
+    "host": "jupyter-yuzan",
+    "username": "yuzan",
+    "program": "training/run_experiment.py",
+    "state": "finished",
+    "heartbeatAt": "2018-08-05T07:29:06.648275",
+    "jobType": "train",
+    "exitcode": 0
+}

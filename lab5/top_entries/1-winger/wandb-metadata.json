@@ -1,0 +1,16 @@
+{
+    "root": "/home/ubuntu/fsdl-text-recognizer-project",
+    "git": {
+        "remote": "https://github.com/winger/fsdl-text-recognizer-project",
+        "commit": "3542bc0ce164841975d56f886a90875240e8643f"
+    },
+    "email": "vladislav.isenbaev@getcruise.com",
+    "startedAt": "2018-08-04T23:12:29.800730",
+    "host": "ip-10-200-66-50",
+    "username": "ubuntu",
+    "program": "training/run_experiment.py",
+    "state": "finished",
+    "heartbeatAt": "2018-08-05T00:23:08.008659",
+    "jobType": "train",
+    "exitcode": 0
+}

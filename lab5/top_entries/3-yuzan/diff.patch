@@ -1,0 +1,36 @@
+diff --git a/lab5/text_recognizer/networks/line_lstm_ctc.py b/lab5/text_recognizer/networks/line_lstm_ctc.py
+index 90d7325..5514a4e 100644
+--- a/lab5/text_recognizer/networks/line_lstm_ctc.py
++++ b/lab5/text_recognizer/networks/line_lstm_ctc.py
+@@ -2,7 +2,7 @@ from boltons.cacheutils import cachedproperty
+ import tensorflow as tf
+ import tensorflow.keras.backend as K
+ from tensorflow.python.client import device_lib
+-from tensorflow.keras.layers import Conv2D, Dense, Dropout, Flatten, Input, MaxPooling2D, Permute, RepeatVector, Reshape, TimeDistributed, Lambda, LSTM, GRU, CuDNNLSTM, Bidirectional
++from tensorflow.keras.layers import Conv2D, Dense, Dropout, Flatten, Input, MaxPooling2D, Permute, RepeatVector, Reshape, TimeDistributed, Lambda, LSTM, GRU, CuDNNLSTM, Bidirectional, BatchNormalization
+ from tensorflow.keras.models import Sequential
+ from tensorflow.keras.models import Model as KerasModel
+ 
+@@ -49,11 +49,19 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+     convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
+     convnet_outputs = TimeDistributed(convnet)(image_patches)
+     # (num_windows, 128)
+-
+-    lstm_output = lstm_fn(128, return_sequences=True)(convnet_outputs)
++    
++    drop0 = Dropout(0.2)(convnet_outputs)
++    
++    bn_output1 = BatchNormalization()(drop0)
++    lstm_output1 = Bidirectional(lstm_fn(256, return_sequences=True))(bn_output1)
+     # (num_windows, 128)
++    drop1 = Dropout(0.3)(lstm_output1)
++
++    bn_output2 = BatchNormalization()(drop1)
++    lstm_output2 = Bidirectional(lstm_fn(256, return_sequences=True))(bn_output2)
++    drop2 = Dropout(0.3)(lstm_output2)
+ 
+-    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)
++    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(drop2)
+     # (num_windows, num_classes)
+     ##### Your code above (Lab 3)
+ 

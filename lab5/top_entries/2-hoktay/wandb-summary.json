@@ -1,0 +1,205 @@
+{
+    "graph": {
+        "_type": "graph",
+        "format": "keras",
+        "nodes": [
+            {
+                "name": "image",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    28,
+                    952
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "reshape",
+                "class_name": "Reshape",
+                "output_shape": [
+                    null,
+                    28,
+                    952,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "image[0][0]"
+                ]
+            },
+            {
+                "name": "lambda",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    474,
+                    28,
+                    6,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "reshape[0][0]"
+                ]
+            },
+            {
+                "name": "time_distributed",
+                "class_name": "TimeDistributed",
+                "output_shape": [
+                    null,
+                    474,
+                    128
+                ],
+                "num_parameters": 117248,
+                "inbound_nodes": [
+                    "lambda[0][0]"
+                ]
+            },
+            {
+                "name": "bidirectional",
+                "class_name": "Bidirectional",
+                "output_shape": [
+                    null,
+                    474,
+                    256
+                ],
+                "num_parameters": 264192,
+                "inbound_nodes": [
+                    "time_distributed[0][0]"
+                ]
+            },
+            {
+                "name": "dropout_2",
+                "class_name": "Dropout",
+                "output_shape": [
+                    null,
+                    474,
+                    256
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "bidirectional[0][0]"
+                ]
+            },
+            {
+                "name": "bidirectional_1",
+                "class_name": "Bidirectional",
+                "output_shape": [
+                    null,
+                    474,
+                    256
+                ],
+                "num_parameters": 395264,
+                "inbound_nodes": [
+                    "dropout_2[0][0]"
+                ]
+            },
+            {
+                "name": "dropout_3",
+                "class_name": "Dropout",
+                "output_shape": [
+                    null,
+                    474,
+                    256
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "bidirectional_1[0][0]"
+                ]
+            },
+            {
+                "name": "input_length",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "y_true",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    97
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "softmax_output",
+                "class_name": "Dense",
+                "output_shape": [
+                    null,
+                    474,
+                    80
+                ],
+                "num_parameters": 20560,
+                "inbound_nodes": [
+                    "dropout_3[0][0]"
+                ]
+            },
+            {
+                "name": "lambda_1",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "input_length[0][0]"
+                ]
+            },
+            {
+                "name": "label_length",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "ctc_loss",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "y_true[0][0]",
+                    "softmax_output[0][0]",
+                    "lambda_1[0][0]",
+                    "label_length[0][0]"
+                ]
+            },
+            {
+                "name": "ctc_decoded",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    null
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "softmax_output[0][0]",
+                    "lambda_1[0][0]"
+                ]
+            }
+        ]
+    },
+    "val_loss": 27.349122733598367,
+    "val_ctc_loss_loss": 27.349122733598367,
+    "loss": 14.645607936585424,
+    "ctc_loss_loss": 14.645607936585424,
+    "epoch": 36,
+    "_runtime": 8448.412419319153,
+    "_timestamp": 1533460460.1469944,
+    "_step": 37,
+    "test_metric": 0.8514655672768671
+}

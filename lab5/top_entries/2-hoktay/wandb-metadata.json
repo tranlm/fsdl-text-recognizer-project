@@ -1,0 +1,16 @@
+{
+    "root": "/home/hoktay/fsdl-text-recognizer-project",
+    "git": {
+        "remote": "https://github.com/gradescope/fsdl-text-recognizer-project",
+        "commit": "50e06007e944853478367b6fa1d88dfff73668dc"
+    },
+    "email": null,
+    "startedAt": "2018-08-05T06:54:44.674398",
+    "host": "jupyter-hoktay",
+    "username": "hoktay",
+    "program": "training/run_experiment.py",
+    "state": "finished",
+    "heartbeatAt": "2018-08-05T09:14:20.356879",
+    "jobType": "train",
+    "exitcode": 0
+}

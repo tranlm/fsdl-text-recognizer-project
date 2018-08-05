@@ -1,0 +1,28 @@
+wandb_version: 1
+
+dataset:
+  desc: null
+  value: IamLinesDataset
+experiment_group:
+  desc: null
+  value: null
+gpu_ind:
+  desc: null
+  value: 0
+model:
+  desc: null
+  value: LineModelCtc
+network:
+  desc: null
+  value: line_lstm_ctc
+network_args:
+  desc: null
+  value:
+    window_stride: 3
+    window_width: 10
+train_args:
+  desc: null
+  value:
+    batch_size: 64
+    epochs: 40
+    username: wizardfishball

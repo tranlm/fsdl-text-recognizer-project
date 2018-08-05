@@ -1,0 +1,150 @@
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to
+==================================================================================================
+image (InputLayer)              (None, 28, 952)      0
+__________________________________________________________________________________________________
+reshape (Reshape)               (None, 28, 952, 1)   0           image[0][0]
+__________________________________________________________________________________________________
+lambda (Lambda)                 (None, 315, 28, 10,  0           reshape[0][0]
+__________________________________________________________________________________________________
+time_distributed (TimeDistribut (None, 315, 128)     313856      lambda[0][0]
+__________________________________________________________________________________________________
+dropout_2 (Dropout)             (None, 315, 128)     0           time_distributed[0][0]
+__________________________________________________________________________________________________
+batch_normalization (BatchNorma (None, 315, 128)     512         dropout_2[0][0]
+__________________________________________________________________________________________________
+bidirectional (Bidirectional)   (None, 315, 512)     790528      batch_normalization[0][0]
+__________________________________________________________________________________________________
+dropout_3 (Dropout)             (None, 315, 512)     0           bidirectional[0][0]
+__________________________________________________________________________________________________
+batch_normalization_1 (BatchNor (None, 315, 512)     2048        dropout_3[0][0]
+__________________________________________________________________________________________________
+bidirectional_1 (Bidirectional) (None, 315, 512)     1576960     batch_normalization_1[0][0]
+__________________________________________________________________________________________________
+dropout_4 (Dropout)             (None, 315, 512)     0           bidirectional_1[0][0]
+__________________________________________________________________________________________________
+input_length (InputLayer)       (None, 1)            0
+__________________________________________________________________________________________________
+y_true (InputLayer)             (None, 97)           0
+__________________________________________________________________________________________________
+softmax_output (Dense)          (None, 315, 80)      41040       dropout_4[0][0]
+__________________________________________________________________________________________________
+lambda_1 (Lambda)               (None, 1)            0           input_length[0][0]
+__________________________________________________________________________________________________
+label_length (InputLayer)       (None, 1)            0
+__________________________________________________________________________________________________
+ctc_loss (Lambda)               (None, 1)            0           y_true[0][0]
+                                                                 softmax_output[0][0]
+                                                                 lambda_1[0][0]
+                                                                 label_length[0][0]
+__________________________________________________________________________________________________
+ctc_decoded (Lambda)            (None, None)         0           softmax_output[0][0]
+                                                                 lambda_1[0][0]
+==================================================================================================
+Total params: 2,724,944
+Trainable params: 2,723,664
+Non-trainable params: 1,280
+__________________________________________________________________________________________________
+WARNING:tensorflow:Output "ctc_decoded" missing from loss dictionary. We assume this was done on purpose, and we will not be expecting any data to be passed to "ctc_decoded" during training.
+Epoch 1/40
+2018-08-05 06:09:39.484455: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1471] Adding visible gpu devices: 0
+2018-08-05 06:09:39.484535: I tensorflow/core/common_runtime/gpu/gpu_device.cc:952] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-08-05 06:09:39.484560: I tensorflow/core/common_runtime/gpu/gpu_device.cc:958]      0
+2018-08-05 06:09:39.484573: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   N
+2018-08-05 06:09:39.484777: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1084] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10760 MB memory) -> physical GPU (device: 0, name: Tesla K80, pci bus id: 0000:00:04.0, compute capability: 3.7)
+2018-08-05 06:09:39.956391: I tensorflow/core/kernels/cuda_solvers.cc:159] Creating CudaSolver handles for stream 0x432b050
+111/111 [==============================] - 186s 2s/step - loss: 163.0681 - ctc_loss_loss: 163.0681 - val_loss: 145.6261 - val_ctc_loss_loss: 145.6261
+Epoch 2/40
+111/111 [==============================] - 176s 2s/step - loss: 129.0611 - ctc_loss_loss: 129.0611 - val_loss: 135.7659 - val_ctc_loss_loss: 135.7659
+Epoch 3/40
+111/111 [==============================] - 176s 2s/step - loss: 107.4401 - ctc_loss_loss: 107.4401 - val_loss: 114.7257 - val_ctc_loss_loss: 114.7257
+Epoch 4/40
+111/111 [==============================] - 175s 2s/step - loss: 89.1116 - ctc_loss_loss: 89.1116 - val_loss: 87.2517 - val_ctc_loss_loss: 87.2517
+Epoch 5/40
+111/111 [==============================] - 175s 2s/step - loss: 72.7680 - ctc_loss_loss: 72.7680 - val_loss: 66.6585 - val_ctc_loss_loss: 66.6585
+Epoch 6/40
+111/111 [==============================] - 175s 2s/step - loss: 62.0937 - ctc_loss_loss: 62.0937 - val_loss: 60.0939 - val_ctc_loss_loss: 60.0939
+Epoch 7/40
+111/111 [==============================] - 175s 2s/step - loss: 54.3884 - ctc_loss_loss: 54.3884 - val_loss: 48.7088 - val_ctc_loss_loss: 48.7088
+Epoch 8/40
+111/111 [==============================] - 176s 2s/step - loss: 48.4398 - ctc_loss_loss: 48.4398 - val_loss: 50.8931 - val_ctc_loss_loss: 50.8931
+Epoch 9/40
+111/111 [==============================] - 176s 2s/step - loss: 43.5307 - ctc_loss_loss: 43.5307 - val_loss: 41.5008 - val_ctc_loss_loss: 41.5008
+Epoch 10/40
+111/111 [==============================] - 175s 2s/step - loss: 39.7623 - ctc_loss_loss: 39.7623 - val_loss: 41.1417 - val_ctc_loss_loss: 41.1417
+Epoch 11/40
+111/111 [==============================] - 175s 2s/step - loss: 36.7373 - ctc_loss_loss: 36.7373 - val_loss: 38.8361 - val_ctc_loss_loss: 38.8361
+Epoch 12/40
+111/111 [==============================] - 175s 2s/step - loss: 34.4873 - ctc_loss_loss: 34.4873 - val_loss: 36.1871 - val_ctc_loss_loss: 36.1871
+Epoch 13/40
+111/111 [==============================] - 176s 2s/step - loss: 32.5005 - ctc_loss_loss: 32.5005 - val_loss: 34.8226 - val_ctc_loss_loss: 34.8226
+Epoch 14/40
+111/111 [==============================] - 176s 2s/step - loss: 30.5340 - ctc_loss_loss: 30.5340 - val_loss: 40.6135 - val_ctc_loss_loss: 40.6135
+Epoch 15/40
+111/111 [==============================] - 176s 2s/step - loss: 29.1867 - ctc_loss_loss: 29.1867 - val_loss: 32.0130 - val_ctc_loss_loss: 32.0130
+Epoch 16/40
+111/111 [==============================] - 175s 2s/step - loss: 27.4869 - ctc_loss_loss: 27.4869 - val_loss: 31.6909 - val_ctc_loss_loss: 31.6909
+Epoch 17/40
+111/111 [==============================] - 175s 2s/step - loss: 26.3685 - ctc_loss_loss: 26.3685 - val_loss: 30.5310 - val_ctc_loss_loss: 30.5310
+Epoch 18/40
+111/111 [==============================] - 176s 2s/step - loss: 25.5501 - ctc_loss_loss: 25.5501 - val_loss: 29.7669 - val_ctc_loss_loss: 29.7669
+Epoch 19/40
+111/111 [==============================] - 177s 2s/step - loss: 24.2088 - ctc_loss_loss: 24.2088 - val_loss: 35.0448 - val_ctc_loss_loss: 35.0448
+Epoch 20/40
+111/111 [==============================] - 177s 2s/step - loss: 23.9908 - ctc_loss_loss: 23.9908 - val_loss: 29.5379 - val_ctc_loss_loss: 29.5379
+Epoch 21/40
+111/111 [==============================] - 176s 2s/step - loss: 22.6377 - ctc_loss_loss: 22.6377 - val_loss: 31.7068 - val_ctc_loss_loss: 31.7068
+Epoch 22/40
+111/111 [==============================] - 175s 2s/step - loss: 22.1703 - ctc_loss_loss: 22.1703 - val_loss: 31.5687 - val_ctc_loss_loss: 31.5687
+Epoch 23/40
+111/111 [==============================] - 175s 2s/step - loss: 21.4698 - ctc_loss_loss: 21.4698 - val_loss: 29.0598 - val_ctc_loss_loss: 29.0598
+Epoch 24/40
+111/111 [==============================] - 175s 2s/step - loss: 20.7145 - ctc_loss_loss: 20.7145 - val_loss: 28.5583 - val_ctc_loss_loss: 28.5583
+Epoch 25/40
+111/111 [==============================] - 175s 2s/step - loss: 20.3004 - ctc_loss_loss: 20.3004 - val_loss: 31.1167 - val_ctc_loss_loss: 31.1167
+Epoch 26/40
+111/111 [==============================] - 174s 2s/step - loss: 19.8625 - ctc_loss_loss: 19.8625 - val_loss: 28.8806 - val_ctc_loss_loss: 28.8806
+Epoch 27/40
+111/111 [==============================] - 175s 2s/step - loss: 19.0539 - ctc_loss_loss: 19.0539 - val_loss: 28.6801 - val_ctc_loss_loss: 28.6801
+Epoch 00027: early stopping
+Training took 4749.255842 s
+GPU utilization: 99.61 +- 1.01
+
+Least accurate predictions:
+True: him suddenly, making him say:
+Pred: tisniotintlnlyiottigitinings.
+True: right?" "Who told you?" "Little bird.
+Pred: righe?&quot; &quot;Who bold you?&quot; &quot;Taale bird.
+True: supposed to leave at two-twenty." "Who says so?" "Your timetable."
+Pred: mopead te bern at tar baedy &quot; ure rag ra&quot;portiatitla.'
+True: Sentence Database P02-109
+Pred: sortore PrtlorePOC-1O
+True: He looked nervous. It had been
+Pred: He bokarmwe Sewaartien
+
+Most accurate predictions:
+True: that they learned to fly properly. The pains associated
+Pred: that they learned to fly properly. The pains associated
+True: Mr. Hayball from the back seat.
+Pred: Mr. Hayball from the back seat.
+True: and Haris there were many events. Chief of these was
+Pred: and Haris there were many events. Chief of these was
+True: the other arm. He would have told
+Pred: the other arm. He would have told
+True: Hope I die kind of composed, Trout. I mean you can't
+Pred: Hope I die kind of composed, Trout. I mean you can't
+
+Random predictions:
+True: movements of the Bentley. It had passed
+Pred: moremant of the Pentley. A had raned
+True: along. If I was thirty years younger and weren't
+Pred: along. If I was thirty years younger and weren't
+True: recently been Ifor's typist, but was now
+Pred: reently ban Yfor's typist, hd was now
+True: thinking that he and Angelina would have
+Pred: thinking that he and Angtina would have
+True: like an ineffective imbecile.&quot;
+Pred: like an ineffetive imbecile.&quot;
+Test evaluation: 0.8423214282008646
+
+

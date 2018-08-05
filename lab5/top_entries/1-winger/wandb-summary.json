@@ -1,0 +1,218 @@
+{
+    "graph": {
+        "_type": "graph",
+        "format": "keras",
+        "nodes": [
+            {
+                "name": "image",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    28,
+                    952
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "reshape",
+                "class_name": "Reshape",
+                "output_shape": [
+                    null,
+                    28,
+                    952,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "image[0][0]"
+                ]
+            },
+            {
+                "name": "lambda",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    470,
+                    28,
+                    14,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "reshape[0][0]"
+                ]
+            },
+            {
+                "name": "time_distributed",
+                "class_name": "TimeDistributed",
+                "output_shape": [
+                    null,
+                    470,
+                    128
+                ],
+                "num_parameters": 510464,
+                "inbound_nodes": [
+                    "lambda[0][0]"
+                ]
+            },
+            {
+                "name": "dropout_2",
+                "class_name": "Dropout",
+                "output_shape": [
+                    null,
+                    470,
+                    128
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "time_distributed[0][0]"
+                ]
+            },
+            {
+                "name": "bidirectional",
+                "class_name": "Bidirectional",
+                "output_shape": [
+                    null,
+                    470,
+                    512
+                ],
+                "num_parameters": 790528,
+                "inbound_nodes": [
+                    "dropout_2[0][0]"
+                ]
+            },
+            {
+                "name": "dropout_3",
+                "class_name": "Dropout",
+                "output_shape": [
+                    null,
+                    470,
+                    512
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "bidirectional[0][0]"
+                ]
+            },
+            {
+                "name": "bidirectional_1",
+                "class_name": "Bidirectional",
+                "output_shape": [
+                    null,
+                    470,
+                    512
+                ],
+                "num_parameters": 1576960,
+                "inbound_nodes": [
+                    "dropout_3[0][0]"
+                ]
+            },
+            {
+                "name": "dropout_4",
+                "class_name": "Dropout",
+                "output_shape": [
+                    null,
+                    470,
+                    512
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "bidirectional_1[0][0]"
+                ]
+            },
+            {
+                "name": "input_length",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "y_true",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    97
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "softmax_output",
+                "class_name": "Dense",
+                "output_shape": [
+                    null,
+                    470,
+                    80
+                ],
+                "num_parameters": 41040,
+                "inbound_nodes": [
+                    "dropout_4[0][0]"
+                ]
+            },
+            {
+                "name": "lambda_1",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "input_length[0][0]"
+                ]
+            },
+            {
+                "name": "label_length",
+                "class_name": "InputLayer",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": []
+            },
+            {
+                "name": "ctc_loss",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    1
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "y_true[0][0]",
+                    "softmax_output[0][0]",
+                    "lambda_1[0][0]",
+                    "label_length[0][0]"
+                ]
+            },
+            {
+                "name": "ctc_decoded",
+                "class_name": "Lambda",
+                "output_shape": [
+                    null,
+                    null
+                ],
+                "num_parameters": 0,
+                "inbound_nodes": [
+                    "softmax_output[0][0]",
+                    "lambda_1[0][0]"
+                ]
+            }
+        ]
+    },
+    "val_loss": 20.758918857523216,
+    "val_ctc_loss_loss": 20.758918857523216,
+    "loss": 19.275734208298644,
+    "ctc_loss_loss": 19.275734208298644,
+    "epoch": 63,
+    "_runtime": 4243.490139245987,
+    "_timestamp": 1533428587.0568788,
+    "_step": 64,
+    "test_metric": 0.8618452488725967
+}

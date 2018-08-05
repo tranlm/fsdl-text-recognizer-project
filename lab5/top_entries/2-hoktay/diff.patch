@@ -1,0 +1,265 @@
+diff --git a/lab3/tasks/train_lstm_line_predictor.sh b/lab3/tasks/train_lstm_line_predictor.sh
+index 9ab4c9f..de95f6c 100755
+--- a/lab3/tasks/train_lstm_line_predictor.sh
++++ b/lab3/tasks/train_lstm_line_predictor.sh
+@@ -2,6 +2,6 @@
+ pipenv run python training/run_experiment.py --save '{"dataset": "EmnistLinesDataset", "model": "LineModelCtc", "network": "line_lstm_ctc",
+ "train_args": {
+             "batch_size": 64,
+-            "epochs": 14
++            "epochs": 16
+         }
+-        }'
++        }' --gpu $1
+diff --git a/lab3/text_recognizer/networks/lenet.py b/lab3/text_recognizer/networks/lenet.py
+index 7e2330b..e95cc8c 100644
+--- a/lab3/text_recognizer/networks/lenet.py
++++ b/lab3/text_recognizer/networks/lenet.py
+@@ -13,7 +13,7 @@ def lenet(input_shape: Tuple[int, ...], output_shape: Tuple[int, ...]) -> Model:
+     if len(input_shape) < 3:
+         model.add(Lambda(lambda x: tf.expand_dims(x, -1), input_shape=input_shape))
+         input_shape = (input_shape[0], input_shape[1], 1)
+-    model.add(Conv2D(32, 
++    model.add(Conv2D(16, 
+                      kernel_size=(3, 3), 
+                      activation='relu', 
+                      input_shape=input_shape))
+@@ -21,17 +21,22 @@ def lenet(input_shape: Tuple[int, ...], output_shape: Tuple[int, ...]) -> Model:
+     model.add(MaxPooling2D(pool_size = (2,2),
+                       strides = (2,2)))
+     
+-    model.add(Conv2D(64, 
++    model.add(Conv2D(32, 
+                      (3, 3), 
+                      activation='relu'))
+     model.add(MaxPooling2D(pool_size=(2, 2)))
++    model.add(Conv2D(64, 
++                     (2, 2), 
++                     activation='relu'))
++    model.add(MaxPooling2D(pool_size=(1, 1)))
+     model.add(Flatten())
++    model.add(Dense(1200, activation='relu'))
++    model.add(Dropout(0.25))
++    model.add(Dense(800, activation='relu'))
++    model.add(Dropout(0.25))
+     model.add(Dense(400, activation='relu'))
+-    model.add(Dropout(0.3))
+-    model.add(Dense(400, activation='relu'))
+-    model.add(Dropout(0.3))
+-    model.add(Dense(400, activation='relu'))
+-    model.add(Dropout(0.3))
++    model.add(Dropout(0.2))
++    
+     model.add(Dense(num_classes, activation='softmax'))
+     ##### Your code above (Lab 2)
+ 
+diff --git a/lab3/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 b/lab3/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5
+index 74b5f6b..15d60be 100644
+Binary files a/lab3/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 and b/lab3/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 differ
+diff --git a/lab4/tasks/train_lstm_line_predictor.sh b/lab4/tasks/train_lstm_line_predictor.sh
+index 7afd0ba..1f206f7 100755
+--- a/lab4/tasks/train_lstm_line_predictor.sh
++++ b/lab4/tasks/train_lstm_line_predictor.sh
+@@ -1,2 +1,8 @@
+ #!/bin/sh
+-pipenv run python training/run_experiment.py --save '{"dataset": "EmnistLinesDataset", "model": "LineModelCtc", "network": "line_lstm_ctc"}'
++pipenv run python training/run_experiment.py --save '{"dataset": "EmnistLinesDataset", "model": "LineModelCtc", "network": "line_lstm_ctc",
++"train_args": {
++            "batch_size": 32,
++            "epochs": 16
++        }
++        }' --gpu $1
++
+diff --git a/lab4/text_recognizer/networks/lenet.py b/lab4/text_recognizer/networks/lenet.py
+index 3cd0f1a..f6b2888 100644
+--- a/lab4/text_recognizer/networks/lenet.py
++++ b/lab4/text_recognizer/networks/lenet.py
+@@ -13,15 +13,33 @@ def lenet(input_shape: Tuple[int, ...], output_shape: Tuple[int, ...]) -> Model:
+     if len(input_shape) < 3:
+         model.add(Lambda(lambda x: tf.expand_dims(x, -1), input_shape=input_shape))
+         input_shape = (input_shape[0], input_shape[1], 1)
+-    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
+-    model.add(Conv2D(64, (3, 3), activation='relu'))
++    model.add(Conv2D(32, 
++                     kernel_size=(3, 3), 
++                     activation='relu', 
++                     input_shape=input_shape))
++
++    model.add(MaxPooling2D(pool_size = (2,2),
++                      strides = (2,2)))
++    
++    model.add(Conv2D(64, 
++                     (3, 3), 
++                     activation='relu'))
+     model.add(MaxPooling2D(pool_size=(2, 2)))
+-    model.add(Dropout(0.2))
++    model.add(Conv2D(128, 
++                     (2, 2), 
++                     activation='relu'))
++    
++    model.add(MaxPooling2D(pool_size=(1, 1)))
++    
+     model.add(Flatten())
+-    model.add(Dense(128, activation='relu'))
+-    model.add(Dropout(0.2))
++    model.add(Dense(600, activation='relu'))
++    model.add(Dropout(0.3))
++    model.add(Dense(200, activation='relu'))
++    model.add(Dropout(0.3))
++    
+     model.add(Dense(num_classes, activation='softmax'))
+     ##### Your code above (Lab 2)
+ 
+     return model
+ 
++
+diff --git a/lab4/text_recognizer/networks/line_lstm_ctc.py b/lab4/text_recognizer/networks/line_lstm_ctc.py
+index 90d7325..4fc32d4 100644
+--- a/lab4/text_recognizer/networks/line_lstm_ctc.py
++++ b/lab4/text_recognizer/networks/line_lstm_ctc.py
+@@ -12,11 +12,16 @@ from text_recognizer.networks.misc import slide_window
+ from text_recognizer.networks.ctc import ctc_decode
+ 
+ 
+-def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
++def line_lstm_ctc(input_shape, 
++                  output_shape, 
++                  window_width=28, 
++                  window_stride=14):
++    
+     image_height, image_width = input_shape
+     output_length, num_classes = output_shape
+ 
+     num_windows = int((image_width - window_width) / window_stride) + 1
++    
+     if num_windows < output_length:
+         raise ValueError(f'Window width/stride need to generate at least {output_length} windows (currently {num_windows})')
+ 
+@@ -37,24 +42,21 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+     ##### Your code below (Lab 3)
+     image_reshaped = Reshape((image_height, image_width, 1))(image_input)
+     # (image_height, image_width, 1)
+-
++    
+     image_patches = Lambda(
+         slide_window,
+         arguments={'window_width': window_width, 'window_stride': window_stride}
+     )(image_reshaped)
+-    # (num_windows, image_height, window_width, 1)
+-
+-    # Make a LeNet and get rid of the last two layers (softmax and dropout)
++    
+     convnet = lenet((image_height, window_width, 1), (num_classes,))
+     convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
+-    convnet_outputs = TimeDistributed(convnet)(image_patches)
+-    # (num_windows, 128)
+ 
+-    lstm_output = lstm_fn(128, return_sequences=True)(convnet_outputs)
+-    # (num_windows, 128)
++    convnet_outputs = TimeDistributed(convnet)(image_patches)
++    # (num_windows, 200)
++    lstm_output = lstm_fn(200, return_sequences=True)(convnet_outputs)
++    
++    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)    
+ 
+-    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)
+-    # (num_windows, num_classes)
+     ##### Your code above (Lab 3)
+ 
+     input_length_processed = Lambda(
+@@ -78,3 +80,4 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+     )
+     return model
+ 
++
+diff --git a/lab4/text_recognizer/weights/CharacterModel_EmnistDataset_mlp_weights.h5 b/lab4/text_recognizer/weights/CharacterModel_EmnistDataset_mlp_weights.h5
+index 86a801d..076237a 100644
+Binary files a/lab4/text_recognizer/weights/CharacterModel_EmnistDataset_mlp_weights.h5 and b/lab4/text_recognizer/weights/CharacterModel_EmnistDataset_mlp_weights.h5 differ
+diff --git a/lab4/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 b/lab4/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5
+index 423a59f..3f9c14c 100644
+Binary files a/lab4/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 and b/lab4/text_recognizer/weights/LineModelCtc_EmnistLinesDataset_line_lstm_ctc_weights.h5 differ
+diff --git a/lab5/tasks/train_lstm_line_predictor_on_iam.sh b/lab5/tasks/train_lstm_line_predictor_on_iam.sh
+index fbc61f5..50d4ea4 100755
+--- a/lab5/tasks/train_lstm_line_predictor_on_iam.sh
++++ b/lab5/tasks/train_lstm_line_predictor_on_iam.sh
+@@ -1,2 +1,14 @@
+ #!/bin/sh
+-pipenv run python training/run_experiment.py --save '{"dataset": "IamLinesDataset", "model": "LineModelCtc", "network": "line_lstm_ctc"}'
++pipenv run python training/run_experiment.py --save --gpu -1 '{"dataset": "IamLinesDataset", 
++"model": "LineModelCtc", 
++"network": "line_lstm_ctc",
++"network_args": {
++"window_width": 6,
++"window_stride": 2
++},
++"train_args": {
++            "batch_size": 32,
++            "epochs": 64,
++            "user_name": "hoktay"
++        }
++        }'
+\ No newline at end of file
+diff --git a/lab5/text_recognizer/networks/lenet.py b/lab5/text_recognizer/networks/lenet.py
+index 3cd0f1a..6818dd9 100644
+--- a/lab5/text_recognizer/networks/lenet.py
++++ b/lab5/text_recognizer/networks/lenet.py
+@@ -24,4 +24,3 @@ def lenet(input_shape: Tuple[int, ...], output_shape: Tuple[int, ...]) -> Model:
+     ##### Your code above (Lab 2)
+ 
+     return model
+-
+diff --git a/lab5/text_recognizer/networks/line_lstm_ctc.py b/lab5/text_recognizer/networks/line_lstm_ctc.py
+index 90d7325..652ba1f 100644
+--- a/lab5/text_recognizer/networks/line_lstm_ctc.py
++++ b/lab5/text_recognizer/networks/line_lstm_ctc.py
+@@ -12,7 +12,7 @@ from text_recognizer.networks.misc import slide_window
+ from text_recognizer.networks.ctc import ctc_decode
+ 
+ 
+-def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
++def line_lstm_ctc(input_shape, output_shape, window_width=6, window_stride=2):
+     image_height, image_width = input_shape
+     output_length, num_classes = output_shape
+ 
+@@ -50,10 +50,16 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+     convnet_outputs = TimeDistributed(convnet)(image_patches)
+     # (num_windows, 128)
+ 
+-    lstm_output = lstm_fn(128, return_sequences=True)(convnet_outputs)
++    lstm_output = Bidirectional(lstm_fn(128, return_sequences=True))(convnet_outputs)
+     # (num_windows, 128)
+ 
+-    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)
++    lstm_output_1_drop_out = Dropout(0.2)(lstm_output)
++    
++    lstm_output2 = Bidirectional(lstm_fn(128, return_sequences=True))(lstm_output_1_drop_out)
++
++    lstm_output_2_drop_out = Dropout(0.2)(lstm_output2)
++
++    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output_2_drop_out)
+     # (num_windows, num_classes)
+     ##### Your code above (Lab 3)
+ 
+@@ -76,5 +82,4 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+         inputs=[image_input, y_true, input_length, label_length],
+         outputs=[ctc_loss_output, ctc_decoded_output]
+     )
+-    return model
+-
++    return model
+\ No newline at end of file
+diff --git a/lab5/training/run_experiment.py b/lab5/training/run_experiment.py
+index eb35525..aed45de 100755
+--- a/lab5/training/run_experiment.py
++++ b/lab5/training/run_experiment.py
+@@ -14,8 +14,8 @@ from training.util import train_model
+ 
+ 
+ DEFAULT_TRAIN_ARGS = {
+-    'batch_size': 64,
+-    'epochs': 8
++    'batch_size': 32,
++    'epochs': 4
+ }
+ 
+ 
