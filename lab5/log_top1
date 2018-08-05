@@ -1,0 +1,183 @@
+__________________________________________________________________________________________________ 
+Layer (type)                    Output Shape         Param #     Connected to                      
+================================================================================================== 
+image (InputLayer)              (None, 28, 952)      0                                             
+__________________________________________________________________________________________________ 
+reshape (Reshape)               (None, 28, 952, 1)   0           image[0][0]                       
+__________________________________________________________________________________________________ 
+lambda (Lambda)                 (None, 470, 28, 14,  0           reshape[0][0]                     
+__________________________________________________________________________________________________ 
+time_distributed (TimeDistribut (None, 470, 128)     510464      lambda[0][0]                      
+__________________________________________________________________________________________________ 
+dropout_2 (Dropout)             (None, 470, 128)     0           time_distributed[0][0]            
+__________________________________________________________________________________________________ 
+bidirectional (Bidirectional)   (None, 470, 512)     790528      dropout_2[0][0]                   
+__________________________________________________________________________________________________ 
+dropout_3 (Dropout)             (None, 470, 512)     0           bidirectional[0][0]               
+__________________________________________________________________________________________________ 
+bidirectional_1 (Bidirectional) (None, 470, 512)     1576960     dropout_3[0][0]                   
+__________________________________________________________________________________________________ 
+dropout_4 (Dropout)             (None, 470, 512)     0           bidirectional_1[0][0]             
+__________________________________________________________________________________________________ 
+y_true (InputLayer)             (None, 97)           0                                             
+__________________________________________________________________________________________________ 
+softmax_output (Dense)          (None, 470, 80)      41040       dropout_4[0][0]                   
+__________________________________________________________________________________________________ 
+lambda_1 (Lambda)               (None, 1)            0           input_length[0][0]                
+__________________________________________________________________________________________________ 
+label_length (InputLayer)       (None, 1)            0                                             
+__________________________________________________________________________________________________ 
+ctc_loss (Lambda)               (None, 1)            0           y_true[0][0]                      
+                                                                 softmax_output[0][0]              
+                                                                 lambda_1[0][0]                    
+                                                                 label_length[0][0]                
+__________________________________________________________________________________________________ 
+ctc_decoded (Lambda)            (None, None)         0           softmax_output[0][0]              
+                                                                 lambda_1[0][0]                    
+================================================================================================== 
+Total params: 2,918,992 
+Trainable params: 2,918,992 
+Non-trainable params: 0 
+__________________________________________________________________________________________________ 
+
+RNING:tensorflow:Output "ctc_decoded" missing from loss dictionary. We assume this was done on purpose, and we will not be expecting any data to be passed to "ctc_decoded" during training. 
+Epoch 1/64 
+2018-08-04 21:44:44.633377: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1471] Adding visible gpu devices: 0 
+2018-08-04 21:44:44.633440: I tensorflow/core/common_runtime/gpu/gpu_device.cc:952] Device interconnect StreamExecutor with strength 1 edge matrix: 
+2018-08-04 21:44:44.633455: I tensorflow/core/common_runtime/gpu/gpu_device.cc:958]      0  
+2018-08-04 21:44:44.633465: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   N  
+2018-08-04 21:44:44.633606: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1084] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 14392 MB memory) -> physical GPU (device: 0, name: Tesla V100-SXM2-16GB, pci bus id: 0000:00:1c.0, compute capability: 7.0) 
+2018-08-04 21:44:45.009634: I tensorflow/core/kernels/cuda_solvers.cc:159] Creating CudaSolver handles for stream 0x55f0fc6e7f10 
+111/111 [==============================] - 78s 701ms/step - loss: 173.4696 - ctc_loss_loss: 173.4696 - val_loss: 149.5238 - val_ctc_loss_loss: 149.5238 
+Epoch 2/64 
+111/111 [==============================] - 69s 623ms/step - loss: 143.1917 - ctc_loss_loss: 143.1917 - val_loss: 143.0528 - val_ctc_loss_loss: 143.0528 
+Epoch 3/64 
+111/111 [==============================] - 69s 624ms/step - loss: 142.4288 - ctc_loss_loss: 142.4288 - val_loss: 141.5336 - val_ctc_loss_loss: 141.5336 
+Epoch 4/64 
+111/111 [==============================] - 69s 625ms/step - loss: 136.2174 - ctc_loss_loss: 136.2174 - val_loss: 132.9694 - val_ctc_loss_loss: 132.9694 
+Epoch 5/64 
+111/111 [==============================] - 68s 610ms/step - loss: 118.2496 - ctc_loss_loss: 118.2496 - val_loss: 110.5130 - val_ctc_loss_loss: 110.5130 
+Epoch 6/64 
+111/111 [==============================] - 67s 600ms/step - loss: 109.3133 - ctc_loss_loss: 109.3133 - val_loss: 103.1619 - val_ctc_loss_loss: 103.1619 
+Epoch 7/64 
+111/111 [==============================] - 66s 595ms/step - loss: 102.2383 - ctc_loss_loss: 102.2383 - val_loss: 96.1195 - val_ctc_loss_loss: 96.1195 
+Epoch 8/64 
+111/111 [==============================] - 66s 592ms/step - loss: 96.2090 - ctc_loss_loss: 96.2090 - val_loss: 93.5156 - val_ctc_loss_loss: 93.5156 
+Epoch 9/64 
+111/111 [==============================] - 66s 599ms/step - loss: 90.7542 - ctc_loss_loss: 90.7542 - val_loss: 82.4122 - val_ctc_loss_loss: 82.4122 
+Epoch 10/64 
+111/111 [==============================] - 66s 598ms/step - loss: 86.1627 - ctc_loss_loss: 86.1627 - val_loss: 82.1502 - val_ctc_loss_loss: 82.1502 
+Epoch 11/64 
+111/111 [==============================] - 66s 599ms/step - loss: 81.0086 - ctc_loss_loss: 81.0086 - val_loss: 71.4157 - val_ctc_loss_loss: 71.4157 
+Epoch 12/64 
+111/111 [==============================] - 66s 592ms/step - loss: 76.5632 - ctc_loss_loss: 76.5632 - val_loss: 67.3732 - val_ctc_loss_loss: 67.3732 
+Epoch 13/64 
+111/111 [==============================] - 66s 594ms/step - loss: 72.3498 - ctc_loss_loss: 72.3498 - val_loss: 63.3898 - val_ctc_loss_loss: 63.3898 
+Epoch 14/64 
+111/111 [==============================] - 66s 595ms/step - loss: 68.3421 - ctc_loss_loss: 68.3421 - val_loss: 58.6937 - val_ctc_loss_loss: 58.6937 
+Epoch 15/64 
+111/111 [==============================] - 66s 594ms/step - loss: 64.2853 - ctc_loss_loss: 64.2853 - val_loss: 54.5822 - val_ctc_loss_loss: 54.5822 
+Epoch 16/64 
+111/111 [==============================] - 65s 590ms/step - loss: 60.8851 - ctc_loss_loss: 60.8851 - val_loss: 51.0535 - val_ctc_loss_loss: 51.0535 
+Epoch 17/64 
+111/111 [==============================] - 66s 595ms/step - loss: 57.9061 - ctc_loss_loss: 57.9061 - val_loss: 47.5919 - val_ctc_loss_loss: 47.5919 
+Epoch 18/64 
+111/111 [==============================] - 65s 581ms/step - loss: 55.0932 - ctc_loss_loss: 55.0932 - val_loss: 46.0226 - val_ctc_loss_loss: 46.0226 
+Epoch 19/64 
+111/111 [==============================] - 64s 580ms/step - loss: 52.5511 - ctc_loss_loss: 52.5511 - val_loss: 44.6971 - val_ctc_loss_loss: 44.6971 
+Epoch 20/64 
+111/111 [==============================] - 66s 594ms/step - loss: 50.6163 - ctc_loss_loss: 50.6163 - val_loss: 41.7211 - val_ctc_loss_loss: 41.7211 
+Epoch 21/64 
+111/111 [==============================] - 66s 599ms/step - loss: 48.1952 - ctc_loss_loss: 48.1952 - val_loss: 41.5755 - val_ctc_loss_loss: 41.5755 
+Epoch 22/64 
+111/111 [==============================] - 67s 600ms/step - loss: 46.3881 - ctc_loss_loss: 46.3881 - val_loss: 40.0754 - val_ctc_loss_loss: 40.0754 
+Epoch 23/64 
+111/111 [==============================] - 67s 600ms/step - loss: 44.8011 - ctc_loss_loss: 44.8011 - val_loss: 38.9094 - val_ctc_loss_loss: 38.9094 
+Epoch 24/64 
+111/111 [==============================] - 66s 599ms/step - loss: 43.1600 - ctc_loss_loss: 43.1600 - val_loss: 36.9027 - val_ctc_loss_loss: 36.9027 
+Epoch 25/64 
+111/111 [==============================] - 67s 602ms/step - loss: 41.9713 - ctc_loss_loss: 41.9713 - val_loss: 35.4475 - val_ctc_loss_loss: 35.4475 
+Epoch 26/64 
+111/111 [==============================] - 67s 600ms/step - loss: 40.4082 - ctc_loss_loss: 40.4082 - val_loss: 36.7147 - val_ctc_loss_loss: 36.7147 
+Epoch 27/64 
+111/111 [==============================] - 66s 596ms/step - loss: 39.2231 - ctc_loss_loss: 39.2231 - val_loss: 33.9809 - val_ctc_loss_loss: 33.9809 
+Epoch 28/64 
+111/111 [==============================] - 67s 600ms/step - loss: 37.9729 - ctc_loss_loss: 37.9729 - val_loss: 34.4035 - val_ctc_loss_loss: 34.4035 
+Epoch 29/64 
+111/111 [==============================] - 66s 599ms/step - loss: 37.1294 - ctc_loss_loss: 37.1294 - val_loss: 32.5479 - val_ctc_loss_loss: 32.5479 
+Epoch 30/64 
+111/111 [==============================] - 67s 599ms/step - loss: 35.9470 - ctc_loss_loss: 35.9470 - val_loss: 32.0788 - val_ctc_loss_loss: 32.0788 
+Epoch 31/64 
+111/111 [==============================] - 66s 596ms/step - loss: 35.2202 - ctc_loss_loss: 35.2202 - val_loss: 31.7734 - val_ctc_loss_loss: 31.7734 
+Epoch 32/64 
+111/111 [==============================] - 66s 591ms/step - loss: 34.2198 - ctc_loss_loss: 34.2198 - val_loss: 31.0784 - val_ctc_loss_loss: 31.0784 
+Epoch 33/64 
+111/111 [==============================] - 66s 592ms/step - loss: 33.3138 - ctc_loss_loss: 33.3138 - val_loss: 30.3891 - val_ctc_loss_loss: 30.3891 
+Epoch 34/64 
+111/111 [==============================] - 66s 592ms/step - loss: 32.5443 - ctc_loss_loss: 32.5443 - val_loss: 31.1300 - val_ctc_loss_loss: 31.1300 
+Epoch 35/64 
+111/111 [==============================] - 66s 593ms/step - loss: 31.9477 - ctc_loss_loss: 31.9477 - val_loss: 29.2724 - val_ctc_loss_loss: 29.2724 
+Epoch 36/64 
+111/111 [==============================] - 66s 591ms/step - loss: 31.0007 - ctc_loss_loss: 31.0007 - val_loss: 29.5260 - val_ctc_loss_loss: 29.5260 
+Epoch 37/64 
+111/111 [==============================] - 66s 592ms/step - loss: 30.4187 - ctc_loss_loss: 30.4187 - val_loss: 28.8471 - val_ctc_loss_loss: 28.8471 
+Epoch 38/64 
+111/111 [==============================] - 66s 591ms/step - loss: 30.0961 - ctc_loss_loss: 30.0961 - val_loss: 28.4174 - val_ctc_loss_loss: 28.4174 
+Epoch 39/64 
+111/111 [==============================] - 66s 591ms/step - loss: 29.3558 - ctc_loss_loss: 29.3558 - val_loss: 30.6312 - val_ctc_loss_loss: 30.6312 
+Epoch 40/64 
+111/111 [==============================] - 66s 591ms/step - loss: 28.7251 - ctc_loss_loss: 28.7251 - val_loss: 29.3639 - val_ctc_loss_loss: 29.3639 
+Epoch 41/64 
+111/111 [==============================] - 65s 584ms/step - loss: 28.3267 - ctc_loss_loss: 28.3267 - val_loss: 28.2942 - val_ctc_loss_loss: 28.2942 
+Epoch 42/64 
+111/111 [==============================] - 64s 578ms/step - loss: 27.7266 - ctc_loss_loss: 27.7266 - val_loss: 27.6997 - val_ctc_loss_loss: 27.6997 
+Epoch 43/64 
+111/111 [==============================] - 64s 577ms/step - loss: 27.5029 - ctc_loss_loss: 27.5029 - val_loss: 28.1590 - val_ctc_loss_loss: 28.1590 
+Epoch 44/64 
+111/111 [==============================] - 64s 577ms/step - loss: 26.9171 - ctc_loss_loss: 26.9171 - val_loss: 28.5618 - val_ctc_loss_loss: 28.5618 
+Epoch 45/64 
+111/111 [==============================] - 64s 573ms/step - loss: 26.3431 - ctc_loss_loss: 26.3431 - val_loss: 29.1878 - val_ctc_loss_loss: 29.1878 
+Epoch 00045: early stopping 
+Training took 2984.173529 s 
+GPU utilization: 82.84 +- 6.41 
+
+Least accurate predictions: 
+True: right?" "Who told you?" "Little bird. 
+Pred: right?&quot;&quot; Who bold you?&quot; &quot;f rale bird. 
+True: He looked nervous. It had been 
+Pred: dictdmun to raurtien 
+True: Philip's spirits soared. 
+Pred: Philip's srintsoered.&quot;&quot; 
+True: became great sighs of ecstacy. 
+Pred: hecone acd wials at on town 
+True: "What did Munyard say?" "The Snort - hull 
+Pred: &quot;That did thunyard say?&quot;&quot;Te tmort-hul 
+
+Most accurate predictions: 
+True: miserable enough my having to take my 
+Pred: miserable enough my having to take my 
+True: so kind and nice and she hoped that one 
+Pred: so kind and nice and she hoped that one 
+True: celebrations, and their friendly welcome 
+Pred: celebrations, and their friendly welcome 
+True: made her send a complacent glance 
+Pred: made her send a complacent glance 
+True: not I, who started this conversation.&quot; 
+Pred: not I, who started this conversation.&quot; 
+
+Random predictions: 
+True: over Bueno Buck reached into the foot 
+Pred: over Bueno Buck reached into the fot 
+True: powerful, world-wide radio and systematically 
+Pred: rower fol, workt- wicke radis and systematicaly 
+True: I'll tell my editor that the story's a dead bird. 
+Pred: I'l tel my editor that the stony's adead bird. 
+True: We must learn all we can about 
+Pred: We must leor af we can about 
+True: arranging a supper party. Then she rang off. 
+Pred: wranging a super pary. Ten sere any of. 
+Test evaluation: 0.8225031071417076 
+
+
+
+

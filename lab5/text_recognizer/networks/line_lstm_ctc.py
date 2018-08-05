@@ -12,7 +12,7 @@ from text_recognizer.networks.misc import slide_window
 from text_recognizer.networks.ctc import ctc_decode
 
 
-def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
+def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14, num_conv=128, num_lstm=256):
     image_height, image_width = input_shape
     output_length, num_classes = output_shape
 
@@ -34,10 +34,11 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
     # Convert the lstm outputs to softmax outputs.
     # Note that lstms expect a input of shape (num_batch_size, num_timesteps, feature_length).
 
-    ##### Your code below (Lab 3)
     image_reshaped = Reshape((image_height, image_width, 1))(image_input)
     # (image_height, image_width, 1)
 
+    ##### Your code below (Lab 3)
+    ## ORIGINAL CODE
     image_patches = Lambda(
         slide_window,
         arguments={'window_width': window_width, 'window_stride': window_stride}
@@ -49,12 +50,38 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14):
     convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
     convnet_outputs = TimeDistributed(convnet)(image_patches)
     # (num_windows, 128)
+    drop_1 = Dropout(0.25)(convnet_outputs)
+    lstm_output = Bidirectional(lstm_fn(256, return_sequences=True))(drop_1)
+    # (num_windows, 128*2)
 
-    lstm_output = lstm_fn(128, return_sequences=True)(convnet_outputs)
-    # (num_windows, 128)
-
-    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)
+    drop_2 = Dropout(0.25)(lstm_output)
+    lstm_output2 = Bidirectional(lstm_fn(256, return_sequences=True))(drop_2)
+    
+    drop_3 = Dropout(0.25)(lstm_output2)
+    softmax_output = Dense(num_classes, activation='softmax',
+                           name='softmax_output')(drop_3)
     # (num_windows, num_classes)
+
+#    ## UPDATED CODE
+#    conv = Conv2D(num_conv, (image_height, window_width), (1, window_stride), activation='relu')(image_reshaped)
+#    # (1, num_windows, num_conv)
+#    # num_windows = (image_width - window_width) / window_stride + 1
+#    
+#    conv_squeezed = Lambda(lambda x: K.squeeze(x, 1))(conv)
+#    # (num_windows, num_conv)
+#    
+#    drop_1 = Dropout(0.5)(conv_squeezed)
+#    lstm_output = Bidirectional(lstm_fn(num_lstm, return_sequences=True))(drop_1)
+#    # (num_windows, num_lstm * 2)
+#    
+#    drop_2 = Dropout(0.5)(lstm_output)
+#    lstm_output2 = Bidirectional(lstm_fn(int(num_lstm/2), return_sequences=True))(drop_2)
+#    # (num_windows, num_lstm)
+#
+#    drop_3 = Dropout(0.5)(lstm_output2)
+#    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(drop_3)
+    # (num_windows, num_classes)
+    ## FINISHED UPDATE
     ##### Your code above (Lab 3)
 
     input_length_processed = Lambda(
