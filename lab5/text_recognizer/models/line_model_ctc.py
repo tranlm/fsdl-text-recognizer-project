@@ -16,6 +16,7 @@ from text_recognizer.datasets import IamLinesDataset
 ##### Hide lines above until Lab 5
 from text_recognizer.models.base import Model
 from text_recognizer.networks.line_lstm_ctc import line_lstm_ctc
+# from text_recognizer.networks.cnn_line_lstm_ctc import cnn_line_lstm_ctc as line_lstm_ctc
 
 
 class LineModelCtc(Model):
