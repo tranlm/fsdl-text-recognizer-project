@@ -38,29 +38,29 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14, 
     # (image_height, image_width, 1)
 
     ##### Your code below (Lab 3)
-    ## ORIGINAL CODE
-    image_patches = Lambda(
-        slide_window,
-        arguments={'window_width': window_width, 'window_stride': window_stride}
-    )(image_reshaped)
-    # (num_windows, image_height, window_width, 1)
-
-    # Make a LeNet and get rid of the last two layers (softmax and dropout)
-    convnet = lenet((image_height, window_width, 1), (num_classes,))
-    convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
-    convnet_outputs = TimeDistributed(convnet)(image_patches)
-    # (num_windows, 128)
-    drop_1 = Dropout(0.25)(convnet_outputs)
-    lstm_output = Bidirectional(lstm_fn(256, return_sequences=True))(drop_1)
-    # (num_windows, 128*2)
-
-    drop_2 = Dropout(0.25)(lstm_output)
-    lstm_output2 = Bidirectional(lstm_fn(256, return_sequences=True))(drop_2)
-    
-    drop_3 = Dropout(0.25)(lstm_output2)
-    softmax_output = Dense(num_classes, activation='softmax',
-                           name='softmax_output')(drop_3)
-    # (num_windows, num_classes)
+#    ## ORIGINAL CODE (slightly modified)
+#    image_patches = Lambda(
+#        slide_window,
+#        arguments={'window_width': window_width, 'window_stride': window_stride}
+#    )(image_reshaped)
+#    # (num_windows, image_height, window_width, 1)
+#
+#    # Make a LeNet and get rid of the last two layers (softmax and dropout)
+#    convnet = lenet((image_height, window_width, 1), (num_classes,))
+#    convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
+#    convnet_outputs = TimeDistributed(convnet)(image_patches)
+#    # (num_windows, 128)
+#    drop_1 = Dropout(0.25)(convnet_outputs)
+#    lstm_output = Bidirectional(lstm_fn(256, return_sequences=True))(drop_1)
+#    # (num_windows, 128*2)
+#
+#    drop_2 = Dropout(0.25)(lstm_output)
+#    lstm_output2 = Bidirectional(lstm_fn(256, return_sequences=True))(drop_2)
+#    
+#    drop_3 = Dropout(0.25)(lstm_output2)
+#    softmax_output = Dense(num_classes, activation='softmax',
+#                           name='softmax_output')(drop_3)
+#    # (num_windows, num_classes)
 
 #    ## UPDATED CODE
 #    conv = Conv2D(num_conv, (image_height, window_width), (1, window_stride), activation='relu')(image_reshaped)
@@ -84,6 +84,53 @@ def line_lstm_ctc(input_shape, output_shape, window_width=28, window_stride=14, 
     ## FINISHED UPDATE
     ##### Your code above (Lab 3)
 
+    ##### 2nd winner
+#    image_patches = Lambda(
+#        slide_window,
+#        arguments={'window_width': window_width, 'window_stride': window_stride}
+#    )(image_reshaped)
+#    # (num_windows, image_height, window_width, 1)
+#
+#    # Make a LeNet and get rid of the last two layers (softmax and dropout)
+#    convnet = lenet((image_height, window_width, 1), (num_classes,))
+#    convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
+#    convnet_outputs = TimeDistributed(convnet)(image_patches)
+#    # (num_windows, 128)
+#
+#    lstm_output = Bidirectional(lstm_fn(128, return_sequences=True))(convnet_outputs)
+#    # (num_windows, 128)
+#
+#    lstm_output_1_drop_out = Dropout(0.2)(lstm_output)
+#    
+#    lstm_output2 = Bidirectional(lstm_fn(128, return_sequences=True))(lstm_output_1_drop_out)
+#
+#    lstm_output_2_drop_out = Dropout(0.2)(lstm_output2)
+#
+#    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output_2_drop_out)    
+    ##### 2nd winner end
+    
+    ##### 1st winner
+    image_patches = Lambda(
+        slide_window,
+        arguments={'window_width': window_width, 'window_stride': window_stride}
+    )(image_reshaped)
+    # (num_windows, image_height, window_width, 1)
+
+    # Make a LeNet and get rid of the last two layers (softmax and dropout)
+    convnet = lenet((image_height, window_width, 1), (num_classes,))
+    convnet = KerasModel(inputs=convnet.inputs, outputs=convnet.layers[-2].output)
+    convnet_outputs = TimeDistributed(convnet)(image_patches)
+    # (num_windows, 128)
+
+    convnet_outputs = Dropout(0.5)(convnet_outputs)
+    lstm_output = Bidirectional(lstm_fn(256, return_sequences=True))(convnet_outputs)
+    convnet_outputs = Dropout(0.5)(convnet_outputs)
+    lstm_output = Bidirectional(lstm_fn(256, return_sequences=True))(convnet_outputs)
+    lstm_output = Dropout(0.5)(lstm_output)
+
+    softmax_output = Dense(num_classes, activation='softmax', name='softmax_output')(lstm_output)
+    ##### 1st winner end
+    
     input_length_processed = Lambda(
         lambda x, num_windows=None: x * num_windows,
         arguments={'num_windows': num_windows}

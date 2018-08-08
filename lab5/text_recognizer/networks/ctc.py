@@ -23,7 +23,8 @@ def ctc_decode(y_pred, input_length, max_output_length):
     y_pred = tf.log(tf.transpose(y_pred, perm=[1, 0, 2]) + K.epsilon())
     input_length = tf.to_int32((tf.squeeze(input_length, axis=-1)))
 
-    (decoded, _) = ctc_ops.ctc_greedy_decoder(inputs=y_pred, sequence_length=input_length)
+#    (decoded, _) = ctc_ops.ctc_greedy_decoder(inputs=y_pred, sequence_length=input_length)
+    (decoded, _) = ctc_ops.ctc_beam_search_decoder(inputs=y_pred, sequence_length=input_length, beam_width=10)
 
     st = decoded[0]
     decoded_dense = tf.sparse_to_dense(st.indices, st.dense_shape, st.values, default_value=-1)

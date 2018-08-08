@@ -1,4 +1,4 @@
-service: text-recognizer-USERNAME
+service: text-recognizer-tranlm
 
 frameworkVersion: ">=1.2.0 <2.0.0"
 
@@ -15,7 +15,7 @@ provider:
   runtime: python3.6
   memorysize: 1024
   timeout: 30
-  versionFunctions: false
+  versionFunctions: true
 
 functions:
   api:
